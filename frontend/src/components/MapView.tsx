@@ -1,221 +1,113 @@
-import React from 'react';import React, { useEffect, useRef } from 'react';
-
-import { APIProvider, Map, AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';import { GPSDevice, AirspaceReservation } from '../types/aviation';
-
-import { GPSDevice, AirspaceReservation } from '../types/aviation';import MapLegend from './MapLegend';
-
+import React from 'react';
+import { APIProvider, Map, AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';
+import { GPSDevice, AirspaceReservation } from '../types/aviation';
 import MapLegend from './MapLegend';
 
 
+interface MapViewProps {
+  devices: GPSDevice[];
+  reservations: AirspaceReservation[];
+  selectedDevice: GPSDevice | null;
+  onDeviceClick: (device: GPSDevice) => void;
+}
 
-interface MapViewProps {interface MapViewProps {
+const MapView: React.FC<MapViewProps> = ({ devices, reservations, selectedDevice, onDeviceClick }) => {
+  const [openInfoWindowId, setOpenInfoWindowId] = React.useState<string | null>(null);
 
-  devices: GPSDevice[];  devices: GPSDevice[];
+  // Get API key from environment variable
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
-  reservations: AirspaceReservation[];  reservations: AirspaceReservation[];
-
-  selectedDevice: GPSDevice | null;  selectedDevice: GPSDevice | null;
-
-  onDeviceClick: (device: GPSDevice) => void;  onDeviceClick: (device: GPSDevice) => void;
-
-}}
-
-
-
-const MapView: React.FC<MapViewProps> = ({ devices, reservations, selectedDevice, onDeviceClick }) => {const MapView: React.FC<MapViewProps> = ({ devices, reservations, selectedDevice, onDeviceClick }) => {
-
-  const [openInfoWindowId, setOpenInfoWindowId] = React.useState<string | null>(null);  const mapRef = useRef<HTMLDivElement>(null);
-
-
-
-  // Get API key from environment variable  const getDeviceIcon = (type: string) => {
-
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';    const icons: any = {
-
+  const getDeviceIcon = (type: string) => {
+    const icons: { [key: string]: string } = {
       aircraft: '✈️',
-
-  const getDeviceIcon = (type: string) => {      drone: '🚁',
-
-    const icons: { [key: string]: string } = {      paraglider: '🪂',
-
-      aircraft: '✈️',      balloon: '🎈'
-
-      drone: '🚁',    };
-
-      paraglider: '🪂',    return icons[type] || '📍';
-
-      balloon: '🎈'  };
-
+      drone: '🚁',
+      paraglider: '🪂',
+      balloon: '🎈'
     };
+    return icons[type] || '📍';
+  };
 
-    return icons[type] || '📍';  const getStatusColor = (status: string) => {
-
-  };    const colors: any = {
-
+  const getStatusColor = (status: string) => {
+    const colors: { [key: string]: string } = {
       online: '#10b981',
-
-  const getStatusColor = (status: string) => {      offline: '#6b7280',
-
-    const colors: { [key: string]: string } = {      warning: '#f59e0b'
-
-      online: '#10b981',    };
-
-      offline: '#6b7280',    return colors[status] || '#6b7280';
-
-      warning: '#f59e0b'  };
-
+      offline: '#6b7280',
+      warning: '#f59e0b'
     };
+    return colors[status] || '#6b7280';
+  };
 
-    return colors[status] || '#6b7280';  return (
+  // Default center (San Francisco area)
+  const defaultCenter = { lat: 37.7749, lng: -122.4194 };
 
-  };    <div className="relative w-full h-full bg-slate-900">
-
-      {/* Map background with grid */}
-
-  // Default center (San Francisco area)      <div className="absolute inset-0 opacity-20" style={{
-
-  const defaultCenter = { lat: 37.7749, lng: -122.4194 };        backgroundImage: 'linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px)',
-
-        backgroundSize: '50px 50px'
-
-  // Calculate center based on devices      }} />
-
+  // Calculate center based on devices
   const mapCenter = devices.length > 0
+    ? {
+        lat: devices.reduce((sum, d) => sum + d.lat, 0) / devices.length,
+        lng: devices.reduce((sum, d) => sum + d.lng, 0) / devices.length
+      }
+    : defaultCenter;
 
-    ? {      {/* Simulated map with device markers */}
-
-        lat: devices.reduce((sum, d) => sum + d.lat, 0) / devices.length,      <div ref={mapRef} className="relative w-full h-full overflow-hidden">
-
-        lng: devices.reduce((sum, d) => sum + d.lng, 0) / devices.length        {devices.map((device) => {
-
-      }          const x = ((device.lng + 122.5) * 2000) % 100;
-
-    : defaultCenter;          const y = ((37.8 - device.lat) * 2000) % 100;
-
-          
-
-  if (!apiKey) {          return (
-
-    return (            <div
-
-      <div className="relative w-full h-full bg-slate-900 flex items-center justify-center">              key={device.id}
-
-        <div className="text-center p-6 bg-red-500/10 border border-red-500 rounded-lg max-w-md">              onClick={() => onDeviceClick(device)}
-
-          <h3 className="text-red-500 font-bold text-lg mb-2">⚠️ Google Maps API Key Missing</h3>              className="absolute cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-all hover:scale-125"
-
-          <p className="text-red-400 text-sm mb-3">              style={{
-
-            Please add your Google Maps API key to use the map feature.                left: `${x}%`,
-
-          </p>                top: `${y}%`,
-
-          <div className="bg-slate-800 p-3 rounded text-left text-xs">                filter: selectedDevice?.id === device.id ? 'drop-shadow(0 0 10px cyan)' : 'none'
-
-            <p className="text-slate-300 mb-2">Create <code className="bg-slate-700 px-1">.env.local</code> file:</p>              }}
-
-            <code className="text-green-400 block">            >
-
-              VITE_GOOGLE_MAPS_API_KEY=your_api_key_here              <div className="relative">
-
-            </code>                <div 
-
-          </div>                  className="absolute inset-0 rounded-full animate-ping opacity-75"
-
-          <p className="text-slate-400 text-xs mt-3">                  style={{ backgroundColor: getStatusColor(device.status) }}
-
-            Get your API key at:{' '}                />
-
-            <a                 <div 
-
-              href="https://console.cloud.google.com/google/maps-apis"                   className="relative text-3xl"
-
-              target="_blank"                   style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}
-
-              rel="noopener noreferrer"                >
-
-              className="text-blue-400 hover:underline"                  {getDeviceIcon(device.type)}
-
-            >                </div>
-
-              Google Cloud Console              </div>
-
-            </a>            </div>
-
-          </p>          );
-
-        </div>        })}
-
+  if (!apiKey) {
+    return (
+      <div className="relative w-full h-full bg-slate-900 flex items-center justify-center">
+        <div className="text-center p-6 bg-red-500/10 border border-red-500 rounded-lg max-w-md">
+          <h3 className="text-red-500 font-bold text-lg mb-2">⚠️ Google Maps API Key Missing</h3>
+          <p className="text-red-400 text-sm mb-3">
+            Please add your Google Maps API key to use the map feature.
+          </p>
+          <div className="bg-slate-800 p-3 rounded text-left text-xs">
+            <p className="text-slate-300 mb-2">Create <code className="bg-slate-700 px-1">.env.local</code> file:</p>
+            <code className="text-green-400 block">
+              VITE_GOOGLE_MAPS_API_KEY=your_api_key_here
+            </code>
+          </div>
+          <p className="text-slate-400 text-xs mt-3">
+            Get your API key at:{' '}
+            <a 
+              href="https://console.cloud.google.com/google/maps-apis"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:underline"
+            >
+              Google Cloud Console
+            </a>
+          </p>
+        </div>
       </div>
+    );
+  }
 
-    );        {/* Airspace reservations */}
-
-  }        {reservations.map((res) => (
-
-          <div
-
-  return (            key={res.id}
-
-    <div className="relative w-full h-full">            className="absolute border-2 border-amber-500 bg-amber-500/10 rounded"
-
-      <APIProvider apiKey={apiKey}>            style={{
-
-        <Map              left: '30%',
-
-          defaultCenter={mapCenter}              top: '30%',
-
-          defaultZoom={10}              width: '20%',
-
-          mapId="smallaviationmonitor-map"              height: '20%'
-
-          gestureHandling="greedy"            }}
-
-          disableDefaultUI={false}          >
-
-          style={{ width: '100%', height: '100%' }}            <div className="text-xs text-amber-300 p-2">
-
-        >              Reserved: {res.minAltitude}-{res.maxAltitude}ft
-
-          {/* Device Markers */}            </div>
-
-          {devices.map((device) => (          </div>
-
-            <AdvancedMarker        ))}
-
-              key={device.id}      </div>
-
+  return (
+    <div className="relative w-full h-full">
+      <APIProvider apiKey={apiKey}>
+        <Map
+          defaultCenter={mapCenter}
+          defaultZoom={10}
+          mapId="smallaviationmonitor-map"
+          gestureHandling="greedy"
+          disableDefaultUI={false}
+          style={{ width: '100%', height: '100%' }}
+        >
+          {/* Device Markers */}
+          {devices.map((device) => (
+            <AdvancedMarker
+              key={device.id}
               position={{ lat: device.lat, lng: device.lng }}
-
-              onClick={() => {      {/* Map controls */}
-
-                onDeviceClick(device);      <div className="absolute top-4 right-4 bg-slate-800/90 backdrop-blur rounded-lg p-2 space-y-2">
-
-                setOpenInfoWindowId(device.id);        <button className="w-10 h-10 bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center text-white transition-colors">+</button>
-
-              }}        <button className="w-10 h-10 bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center text-white transition-colors">-</button>
-
-            >      </div>
-
+              onClick={() => {
+                onDeviceClick(device);
+                setOpenInfoWindowId(device.id);
+              }}
+            >
               <div
-
-                className="flex items-center justify-center w-10 h-10 rounded-full border-2 shadow-lg cursor-pointer hover:scale-110 transition-transform"      {/* Map Legend */}
-
-                style={{      <MapLegend />
-
+                className="flex items-center justify-center w-10 h-10 rounded-full border-2 shadow-lg cursor-pointer hover:scale-110 transition-transform"
+                style={{
                   backgroundColor: getStatusColor(device.status),
-
-                  borderColor: device.id === selectedDevice?.id ? '#3b82f6' : 'white',    </div>
-
-                  borderWidth: device.id === selectedDevice?.id ? '3px' : '2px'  );
-
-                }}};
-
+                  borderColor: device.id === selectedDevice?.id ? '#3b82f6' : 'white',
+                  borderWidth: device.id === selectedDevice?.id ? '3px' : '2px'
+                }}
               >
-
-                <span className="text-xl">{getDeviceIcon(device.type)}</span>export default MapView;
-
+                <span className="text-xl">{getDeviceIcon(device.type)}</span>
               </div>
-
               {openInfoWindowId === device.id && (
                 <InfoWindow
                   position={{ lat: device.lat, lng: device.lng }}
@@ -257,7 +149,7 @@ const MapView: React.FC<MapViewProps> = ({ devices, reservations, selectedDevice
             </AdvancedMarker>
           ))}
 
-          {/* Airspace Reservations (simplified as circles for now) */}
+          {/* Airspace Reservations */}
           {reservations.map((reservation) => (
             <AdvancedMarker
               key={reservation.id}
