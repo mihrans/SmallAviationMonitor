@@ -3,8 +3,8 @@ main = "src/index.ts"
 compatibility_date = "2025-10-15"
 compatibility_flags = ["nodejs_compat"]
 
-# Account ID - Update with your Cloudflare account ID
-account_id = "YOUR_ACCOUNT_ID"
+# Account ID
+account_id = "1121916dc461e5864bcb2da2fbfc351e"
 
 # Workers configuration
 workers_dev = true
@@ -18,27 +18,29 @@ workers_dev = true
 [[d1_databases]]
 binding = "DB"
 database_name = "smallaviationmonitor-db"
-database_id = "YOUR_DATABASE_ID"
+database_id = "dfb0f9f1-0e39-4641-8068-487ef508a278"
 
-# Queue bindings for alerts
-[[queues.producers]]
-binding = "ALERT_QUEUE"
-queue = "smallaviationmonitor-alerts"
+# Queue bindings for alerts (requires Workers Paid plan)
+# Alternative: Store alerts in D1 and process via scheduled worker
+# [[queues.producers]]
+# binding = "ALERT_QUEUE"
+# queue = "smallaviationmonitor-alerts"
 
-[[queues.consumers]]
-queue = "smallaviationmonitor-alerts"
-max_batch_size = 10
-max_batch_timeout = 30
+# [[queues.consumers]]
+# queue = "smallaviationmonitor-alerts"
+# max_batch_size = 10
+# max_batch_timeout = 30
 
-# Durable Objects for WebSocket
-[[durable_objects.bindings]]
-name = "WEBSOCKET_COORDINATOR"
-class_name = "WebSocketCoordinator"
-script_name = "smallaviationmonitor-api"
+# Durable Objects for WebSocket (requires Workers Paid plan)
+# Alternative: Use polling or Server-Sent Events for real-time updates on free tier
+# [[durable_objects.bindings]]
+# name = "WEBSOCKET_COORDINATOR"
+# class_name = "WebSocketCoordinator"
+# script_name = "smallaviationmonitor-api"
 
-[[migrations]]
-tag = "v1"
-new_classes = ["WebSocketCoordinator"]
+# [[migrations]]
+# tag = "v1"
+# new_classes = ["WebSocketCoordinator"]
 
 # Environment variables
 [env.production]
@@ -54,9 +56,6 @@ name = "smallaviationmonitor-api-staging"
 ENVIRONMENT = "staging"
 
 # Build configuration
-[build]
-command = "npm run build"
-
-[build.upload]
-format = "modules"
-main = "./dist/index.js"
+# Build configuration will be added when implementing workers
+# [build]
+# command = "npm run build"
