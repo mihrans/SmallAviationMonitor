@@ -1,0 +1,14 @@
+{
+  "name": "sam-e2e-tests",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "install:browsers": "playwright install --with-deps"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^20.12.12"
+  }
+}

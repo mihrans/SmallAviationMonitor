@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => ({
         const sha = process.env.VITE_GIT_SHA || 'unknown';
         const time = process.env.VITE_BUILD_TIME || new Date().toISOString();
         return html
-          .replace('%VITE_GIT_SHA%', sha)
-          .replace('%VITE_BUILD_TIME%', time);
+          .replace('__BUILD_SHA__', sha)
+          .replace('__BUILD_TIME__', time);
       }
     }
   ].filter(Boolean),

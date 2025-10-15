@@ -64,3 +64,13 @@ To prevent regressions and avoid asking the user to manually verify, every chang
 	- No “please try” language—perform steps yourself and provide results.
 
 These rules are binding for this repository.
+
+## No bulk-edit previews / Always save first (MANDATORY)
+
+- Do NOT use any editing mode that creates a "Keep/Undo" bulk-edit preview. Use direct-on-disk edits only.
+- Preferred tool: direct patch application that writes immediately to disk.
+- Before ANY build/test/deploy:
+	1) Execute a Save‑All across the workspace.
+	2) Re-open changed files to spot-check final content.
+	3) Run `git status` to ensure changes are in the working tree and not stuck in an editor preview.
+- Never run builds/tests while any "Keep/Undo" banner is visible.
