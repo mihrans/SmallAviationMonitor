@@ -1,0 +1,58 @@
+# .gitignore for React Native
+
+# Node modules
+node_modules/
+
+# React Native
+.expo/
+.expo-shared/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store
+
+# Android
+android/build/
+android/app/build/
+android/.gradle/
+android/local.properties
+android/.idea/
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+
+# iOS
+ios/build/
+ios/Pods/
+ios/*.xcworkspace
+!default.xcworkspace
+ios/*.xcuserdata
+ios/.xcode.env.local
+
+# Temporary files
+tmp/
+temp/
+
+# Metro
+.metro-health-check*
+
+# Logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+
+# VS Code
+.vscode/

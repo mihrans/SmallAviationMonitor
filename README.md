@@ -22,6 +22,7 @@ The frontend has been developed with React + TypeScript + Vite. Currently integr
 - **Device Status Monitoring**: Online/offline/warning status tracking
 - **Connection Statistics**: Monitor API and TCP/IP connections
 - **Modern UI**: Responsive design with dark mode support
+- **Mobile GPS Logger**: iOS & Android app for sending precise GPS coordinates (React Native)
 
 ### 🚧 In Development
 - **API Receiver Endpoints**: Accept GPS data via REST API
@@ -53,11 +54,14 @@ SmallAviationMonitor/
 │   ├── product-vision.md      # Product vision document
 │   ├── functionality-planning.md
 │   └── architecture.md        # Architecture design (TBD)
-├── src/                       # Source code (future)
-│   ├── backend/              # Backend services
-│   ├── frontend/             # Web interface
-│   ├── data/                 # Data processing
-│   └── analytics/            # Analytics engine
+├── backend/                   # Cloudflare Workers API
+│   ├── src/                  # Worker source code
+│   └── schema/               # Database schema
+├── frontend/                  # React web application
+│   └── src/                  # Frontend source code
+├── mobile/                    # iOS & Android GPS logger
+│   ├── App.tsx               # Main mobile app
+│   └── QUICK-SETUP.md        # Mobile setup guide
 ├── tests/                     # Test suites (future)
 │   ├── unit/                 # Unit tests
 │   ├── integration/          # Integration tests
@@ -99,7 +103,7 @@ SmallAviationMonitor/
 - [ ] Production deployment
 
 ### Phase 5: Enhancement - Q2 2026+
-- [ ] Mobile application
+- [✓] Mobile application (iOS & Android GPS logger)
 - [ ] Advanced analytics
 - [ ] Multi-language support
 - [ ] API documentation portal
@@ -146,6 +150,7 @@ This project is currently in the planning phase. Contribution guidelines will be
 - Enable airspace reservation with GPS polygon + altitude + time
 - Queue alerts via Cloudflare Queues for relevant recipients
 - Worldwide accessibility with low latency
+- Mobile GPS logger for iOS and Android devices
 
 ### Non-Functional Requirements
 - **Performance**: Sub-100ms response time at edge locations
