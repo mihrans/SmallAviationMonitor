@@ -2,164 +2,68 @@ import React from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, Smartphone, Apple, AlertCircle } from 'lucide-react';
+import { Smartphone, AlertCircle, Globe, Wifi, CheckCircle2, Download } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-
-const GITHUB_REPO = 'mihrans/SmallAviationMonitor';
-const APK_DOWNLOAD_URL = `https://github.com/${GITHUB_REPO}/releases/latest/download/app-release.apk`;
-const GITHUB_RELEASES_URL = `https://github.com/${GITHUB_REPO}/releases`;
+import { Badge } from '@/components/ui/badge';
 
 export function MobileDownload() {
+  const pwaUrl = `${window.location.origin}/pwa`;
+  
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl">
+    <div className="container mx-auto py-8 px-4 max-w-3xl">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-2">Download GPS Logger</h1>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <Smartphone className="h-12 w-12 text-blue-500" />
+          <Globe className="h-12 w-12 text-green-500" />
+        </div>
+        <h1 className="text-4xl font-bold mb-2">GPS Logger Web App</h1>
         <p className="text-lg text-muted-foreground">
-          Mobile app for tracking your flights and sending GPS data to SmallAviationMonitor
+          Progressive Web App - Works on iOS & Android, no app store required!
         </p>
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <Badge variant="default" className="bg-blue-600">
+            <Wifi className="h-3 w-3 mr-1" /> Works Offline
+          </Badge>
+          <Badge variant="default" className="bg-green-600">
+            <CheckCircle2 className="h-3 w-3 mr-1" /> Installable
+          </Badge>
+          <Badge variant="default" className="bg-purple-600">
+            <Smartphone className="h-3 w-3 mr-1" /> Cross-Platform
+          </Badge>
+        </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
-        {/* Android Card */}
-        <Card className="border-2">
-          <CardHeader>
-            <div className="flex items-center gap-3 mb-2">
-              <Smartphone className="h-8 w-8 text-green-600" />
-              <CardTitle className="text-2xl">Android</CardTitle>
-            </div>
-            <CardDescription>
-              Download the APK directly to your Android device
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* QR Code */}
-            <div className="bg-white p-4 rounded-lg inline-block mx-auto flex justify-center">
+      {/* Main PWA Card */}
+      <Card className="border-2 border-blue-500 mb-8">
+        <CardHeader>
+          <div className="flex items-center justify-between mb-2">
+            <CardTitle className="text-2xl">Progressive Web App</CardTitle>
+            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+              Recommended
+            </Badge>
+          </div>
+          <CardDescription>
+            Install on your phone for an app-like experience with full GPS tracking
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* QR Code */}
+          <div className="flex flex-col items-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
               <QRCodeSVG
-                value={APK_DOWNLOAD_URL}
-                size={200}
+                value={pwaUrl}
+                size={240}
                 level="H"
                 includeMargin={true}
               />
             </div>
-            <p className="text-sm text-center text-muted-foreground">
-              Scan this QR code with your Android device
+            <p className="text-sm text-center text-muted-foreground mb-2">
+              Scan this QR code with your phone's camera
             </p>
-
-            {/* Download Button */}
-            <Button
-              className="w-full"
-              size="lg"
-              onClick={() => window.open(APK_DOWNLOAD_URL, '_blank')}
-            >
-              <Download className="mr-2 h-5 w-5" />
-              Download APK
-            </Button>
-
-            {/* Installation Instructions */}
-            <Alert>
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription className="text-xs">
-                <strong>Installation:</strong>
-                <ol className="mt-2 space-y-1 list-decimal list-inside">
-                  <li>Enable "Install from Unknown Sources" in Settings</li>
-                  <li>Download and open the APK file</li>
-                  <li>Follow the installation prompts</li>
-                  <li>Grant location permissions when prompted</li>
-                </ol>
-              </AlertDescription>
-            </Alert>
-
-            <div className="pt-2">
-              <p className="text-sm font-semibold mb-1">Features:</p>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>✓ High-accuracy GPS tracking</li>
-                <li>✓ Real-time position updates</li>
-                <li>✓ Multiple aircraft types</li>
-                <li>✓ Offline configuration storage</li>
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* iOS Card */}
-        <Card className="border-2 border-muted">
-          <CardHeader>
-            <div className="flex items-center gap-3 mb-2">
-              <Apple className="h-8 w-8 text-gray-600" />
-              <CardTitle className="text-2xl">iOS</CardTitle>
-            </div>
-            <CardDescription>
-              Coming soon via TestFlight or App Store
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Placeholder */}
-            <div className="bg-muted p-4 rounded-lg h-[200px] flex items-center justify-center">
-              <div className="text-center">
-                <Apple className="h-16 w-16 mx-auto mb-3 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">
-                  iOS build coming soon
-                </p>
-              </div>
-            </div>
-            <p className="text-sm text-center text-muted-foreground">
-              iOS requires App Store or TestFlight distribution
+            <p className="text-xs text-center text-muted-foreground">
+              {pwaUrl}
             </p>
-
-            {/* Info Alert */}
-            <Alert>
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription className="text-xs">
-                <strong>Why no direct download?</strong>
-                <p className="mt-2">
-                  Apple's security policies prevent direct app installation. iOS apps must be
-                  distributed through:
-                </p>
-                <ul className="mt-2 space-y-1 list-disc list-inside">
-                  <li><strong>TestFlight</strong> - Beta testing (up to 10,000 users)</li>
-                  <li><strong>App Store</strong> - Official release</li>
-                  <li><strong>Enterprise</strong> - Organization-only (requires license)</li>
-                </ul>
-              </AlertDescription>
-            </Alert>
-
-            <div className="pt-2">
-              <p className="text-sm font-semibold mb-1">Coming Soon:</p>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>□ TestFlight beta program</li>
-                <li>□ App Store submission</li>
-                <li>□ Same features as Android</li>
-                <li>□ iOS-optimized interface</li>
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* PWA Option - Backup for both platforms */}
-      <Card className="border-2 border-blue-500 mb-8">
-        <CardHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <Smartphone className="h-8 w-8 text-blue-600" />
-            <CardTitle className="text-2xl">Web App (PWA) - Works on Both!</CardTitle>
           </div>
-          <CardDescription>
-            Progressive Web App - No installation required, works on iOS and Android
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* QR Code for PWA */}
-          <div className="bg-white p-4 rounded-lg inline-block mx-auto flex justify-center">
-            <QRCodeSVG
-              value={`${window.location.origin}/pwa`}
-              size={200}
-              level="H"
-              includeMargin={true}
-            />
-          </div>
-          <p className="text-sm text-center text-muted-foreground">
-            Scan to open PWA on your phone
-          </p>
 
           {/* Launch Button */}
           <Button
@@ -168,166 +72,312 @@ export function MobileDownload() {
             onClick={() => window.open('/pwa', '_blank')}
           >
             <Smartphone className="mr-2 h-5 w-5" />
-            Launch Web App
+            Launch Web App Now
           </Button>
+
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-2 gap-4 pt-4">
+            <div className="space-y-2">
+              <h4 className="font-semibold text-sm flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                Platform Support
+              </h4>
+              <ul className="text-sm text-muted-foreground space-y-1 ml-6">
+                <li>✓ iOS (Safari 11.3+)</li>
+                <li>✓ Android (Chrome, Edge)</li>
+                <li>✓ Desktop browsers</li>
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-semibold text-sm flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                Features
+              </h4>
+              <ul className="text-sm text-muted-foreground space-y-1 ml-6">
+                <li>✓ High-accuracy GPS</li>
+                <li>✓ Real-time updates (5s)</li>
+                <li>✓ Offline support</li>
+                <li>✓ Background sync</li>
+              </ul>
+            </div>
+          </div>
 
           {/* Installation Instructions */}
           <Alert className="bg-blue-50 border-blue-200">
             <AlertCircle className="h-4 w-4 text-blue-600" />
             <AlertDescription className="text-xs">
-              <strong>How to "Install" (Add to Home Screen):</strong>
-              <div className="mt-2 space-y-2">
+              <strong className="block mb-2">How to Install:</strong>
+              
+              <div className="space-y-3">
                 <div>
-                  <strong>iOS (Safari):</strong>
-                  <ol className="mt-1 space-y-1 list-decimal list-inside">
+                  <strong className="text-blue-800">📱 iOS (iPhone/iPad):</strong>
+                  <ol className="mt-1 space-y-1 list-decimal list-inside ml-2">
                     <li>Open the PWA link in Safari</li>
-                    <li>Tap the Share button (square with arrow)</li>
-                    <li>Select "Add to Home Screen"</li>
-                    <li>Grant location permission when prompted</li>
+                    <li>Tap the <strong>Share</strong> button (□ with arrow up)</li>
+                    <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+                    <li>Tap "Add" to confirm</li>
+                    <li>Open from your home screen like any other app!</li>
                   </ol>
                 </div>
+                
                 <div>
-                  <strong>Android (Chrome):</strong>
-                  <ol className="mt-1 space-y-1 list-decimal list-inside">
+                  <strong className="text-blue-800">🤖 Android:</strong>
+                  <ol className="mt-1 space-y-1 list-decimal list-inside ml-2">
                     <li>Open the PWA link in Chrome</li>
-                    <li>Tap "Add to Home Screen" prompt</li>
-                    <li>Or: Menu → "Install App"</li>
-                    <li>Grant location permission when prompted</li>
+                    <li>Tap the <strong>"Add to Home screen"</strong> banner</li>
+                    <li>Or: Tap menu (⋮) → <strong>"Install app"</strong></li>
+                    <li>Confirm installation</li>
+                    <li>Open from your home screen!</li>
                   </ol>
                 </div>
               </div>
-            </AlertDescription>
-          </Alert>
-
-          <div className="pt-2">
-            <p className="text-sm font-semibold mb-1">Features:</p>
-            <ul className="text-sm text-muted-foreground space-y-1">
-              <li>✓ Works on iOS & Android</li>
-              <li>✓ No app store required</li>
-              <li>✓ Full GPS/location access</li>
-              <li>✓ Offline support with data sync</li>
-              <li>✓ Installable like a native app</li>
-              <li>✓ Automatic updates</li>
-              <li>✓ Same features as native apps</li>
-            </ul>
-          </div>
-
-          <Alert className="bg-green-50 border-green-200">
-            <AlertCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-xs">
-              <strong>Recommended for iOS users!</strong> The PWA works great on iOS and doesn't
-              require TestFlight or App Store approval. Just add to home screen and you're ready to go!
+              
+              <div className="mt-3 pt-3 border-t border-blue-300">
+                <strong className="text-blue-800">🔐 Grant Location Permission:</strong>
+                <p className="mt-1">When you first start tracking, your browser will ask for location permission. Tap "Allow" to enable GPS tracking.</p>
+              </div>
             </AlertDescription>
           </Alert>
         </CardContent>
       </Card>
 
-      {/* Additional Information */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>System Requirements</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <div>
-              <p className="font-semibold mb-1">Android:</p>
-              <ul className="text-muted-foreground space-y-1">
-                <li>• Android 6.0 (API 23) or higher</li>
-                <li>• GPS/Location services</li>
-                <li>• Internet connection</li>
-                <li>• ~15 MB storage space</li>
-              </ul>
+      {/* Why PWA Section */}
+      <Card className="border-2 mb-8">
+        <CardHeader>
+          <CardTitle className="text-xl">Why Progressive Web App?</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-sm">No App Store Required</strong>
+                  <p className="text-xs text-muted-foreground">Install directly from your browser, no Apple ID or Google account needed</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-sm">Instant Updates</strong>
+                  <p className="text-xs text-muted-foreground">Always get the latest version automatically, no manual updates</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-sm">Cross-Platform</strong>
+                  <p className="text-xs text-muted-foreground">Works on iOS, Android, and desktop with the same experience</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="font-semibold mb-1">iOS (when available):</p>
-              <ul className="text-muted-foreground space-y-1">
-                <li>• iOS 13.0 or higher</li>
-                <li>• GPS/Location services</li>
-                <li>• Internet connection</li>
-                <li>• ~20 MB storage space</li>
-              </ul>
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-sm">Full GPS Access</strong>
+                  <p className="text-xs text-muted-foreground">Same location accuracy as native apps, updates every 5 seconds</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-sm">Works Offline</strong>
+                  <p className="text-xs text-muted-foreground">Continue tracking without internet, data syncs when reconnected</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-sm">Small Footprint</strong>
+                  <p className="text-xs text-muted-foreground">Uses less storage than native apps, uninstall anytime</p>
+                </div>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Need Help?</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <div>
-              <p className="font-semibold mb-1">Documentation:</p>
-              <ul className="space-y-1">
-                <li>
-                  <a
-                    href={`https://github.com/${GITHUB_REPO}#readme`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    → User Guide
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={`https://github.com/${GITHUB_REPO}/blob/main/mobile/README.md`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    → Mobile App Docs
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={`https://github.com/${GITHUB_REPO}/blob/main/mobile/QUICK-SETUP.md`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    → Quick Setup
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-semibold mb-1">Support:</p>
-              <ul className="space-y-1">
-                <li>
-                  <a
-                    href={`https://github.com/${GITHUB_REPO}/issues`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    → Report an Issue
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={GITHUB_RELEASES_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    → All Releases
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          <Alert className="bg-green-50 border-green-200 mt-4">
+            <CheckCircle2 className="h-4 w-4 text-green-600" />
+            <AlertDescription className="text-xs">
+              <strong>Perfect for iOS users!</strong> No need to wait for App Store approval or pay $99/year for Apple Developer account. The PWA works great on iPhone and iPad with full GPS access through Safari.
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
 
-      {/* Version Info */}
-      <div className="mt-6 text-center text-sm text-muted-foreground">
+      {/* How It Works */}
+      <Card className="border-2 mb-8">
+        <CardHeader>
+          <CardTitle className="text-xl">How It Works</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex-shrink-0">
+                1
+              </div>
+              <div>
+                <strong className="text-sm">Configure Your Device</strong>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Select your aircraft type (Aircraft, Drone, Paraglider, Hot Air Balloon), enter your name and phone number. Your device ID is automatically generated.
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex-shrink-0">
+                2
+              </div>
+              <div>
+                <strong className="text-sm">Start Tracking</strong>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Tap "Start Tracking" and grant location permission. The app will continuously monitor your GPS position with high accuracy mode enabled.
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex-shrink-0">
+                3
+              </div>
+              <div>
+                <strong className="text-sm">Automatic Updates</strong>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Your position is sent to the server every 5 seconds. If you lose connection, data is queued locally and synced when you're back online.
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex-shrink-0">
+                4
+              </div>
+              <div>
+                <strong className="text-sm">View on Dashboard</strong>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Your live position appears on the monitoring dashboard at{' '}
+                  <a href="/" className="text-blue-600 hover:underline">
+                    smallaviationmonitor.pages.dev
+                  </a>
+                  {' '}where administrators can track all active devices.
+                </p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Technical Details */}
+      <Card className="border-2 mb-8">
+        <CardHeader>
+          <CardTitle className="text-xl">Technical Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <h4 className="font-semibold mb-2">GPS Capabilities</h4>
+              <ul className="space-y-1 text-muted-foreground">
+                <li>• High-accuracy mode (best available)</li>
+                <li>• Update interval: 5 seconds</li>
+                <li>• Tracks: Lat, Lng, Altitude, Speed, Heading</li>
+                <li>• Accuracy reporting (meters)</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-2">Offline Support</h4>
+              <ul className="space-y-1 text-muted-foreground">
+                <li>• Service Worker caching</li>
+                <li>• IndexedDB data queue</li>
+                <li>• Automatic background sync</li>
+                <li>• No data loss when offline</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-2">Data Tracking</h4>
+              <ul className="space-y-1 text-muted-foreground">
+                <li>• Device type and configuration</li>
+                <li>• Pilot name and contact info</li>
+                <li>• Real-time telemetry data</li>
+                <li>• Update statistics and logs</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-2">Privacy & Security</h4>
+              <ul className="space-y-1 text-muted-foreground">
+                <li>• HTTPS only communication</li>
+                <li>• Location permission required</li>
+                <li>• Data stored securely on server</li>
+                <li>• Uninstall anytime (remove from home screen)</li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Support Section */}
+      <Card className="border-2">
+        <CardHeader>
+          <CardTitle className="text-xl">Need Help?</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <h4 className="font-semibold text-sm mb-2">Common Issues</h4>
+              <div className="space-y-2 text-xs text-muted-foreground">
+                <div>
+                  <strong className="text-foreground">Location permission denied:</strong>
+                  <p>iOS: Settings → Safari → Location → "Ask" or "Allow"</p>
+                  <p>Android: Settings → Apps → Chrome → Permissions → Location → "Allow"</p>
+                </div>
+                <div>
+                  <strong className="text-foreground">App not installing:</strong>
+                  <p>iOS: Must use Safari browser, tap Share → Add to Home Screen</p>
+                  <p>Android: Look for "Install app" banner or in Chrome menu</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-sm mb-2">Documentation</h4>
+              <div className="space-y-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => window.open('https://github.com/mihrans/SmallAviationMonitor/blob/main/frontend/PWA-README.md', '_blank')}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  PWA Documentation
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => window.open('https://github.com/mihrans/SmallAviationMonitor#readme', '_blank')}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Project README
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => window.open('https://github.com/mihrans/SmallAviationMonitor/issues', '_blank')}
+                >
+                  <AlertCircle className="h-4 w-4 mr-2" />
+                  Report an Issue
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Footer */}
+      <div className="text-center text-sm text-muted-foreground mt-8">
         <p>
-          Latest version: <strong>v1.0.0</strong> • Updated: October 15, 2025
-        </p>
-        <p className="mt-1">
-          Open source •{' '}
+          Part of SmallAviationMonitor - Tracking aviation worldwide{' '}
           <a
-            href={`https://github.com/${GITHUB_REPO}`}
+            href="https://github.com/mihrans/SmallAviationMonitor"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-600 hover:underline"
