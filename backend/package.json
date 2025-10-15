@@ -1,0 +1,24 @@
+{
+  "name": "smallaviationmonitor-backend",
+  "version": "1.0.0",
+  "description": "Cloudflare Workers backend for SmallAviationMonitor",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:production": "wrangler deploy --env production",
+    "build": "tsc",
+    "test": "vitest",
+    "db:init": "wrangler d1 execute smallaviationmonitor-db --file=./schema/init.sql",
+    "db:migrate": "wrangler d1 migrations apply smallaviationmonitor-db"
+  },
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20241022.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5",
+    "wrangler": "^3.87.0"
+  }
+}

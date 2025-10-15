@@ -1,0 +1,62 @@
+name = "smallaviationmonitor-api"
+main = "src/index.ts"
+compatibility_date = "2025-10-15"
+compatibility_flags = ["nodejs_compat"]
+
+# Account ID - Update with your Cloudflare account ID
+account_id = "YOUR_ACCOUNT_ID"
+
+# Workers configuration
+workers_dev = true
+
+# Routes for production
+# routes = [
+#   { pattern = "smallaviationmonitor.com/api/*", zone_name = "smallaviationmonitor.com" }
+# ]
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "smallaviationmonitor-db"
+database_id = "YOUR_DATABASE_ID"
+
+# Queue bindings for alerts
+[[queues.producers]]
+binding = "ALERT_QUEUE"
+queue = "smallaviationmonitor-alerts"
+
+[[queues.consumers]]
+queue = "smallaviationmonitor-alerts"
+max_batch_size = 10
+max_batch_timeout = 30
+
+# Durable Objects for WebSocket
+[[durable_objects.bindings]]
+name = "WEBSOCKET_COORDINATOR"
+class_name = "WebSocketCoordinator"
+script_name = "smallaviationmonitor-api"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["WebSocketCoordinator"]
+
+# Environment variables
+[env.production]
+name = "smallaviationmonitor-api"
+
+[env.production.vars]
+ENVIRONMENT = "production"
+
+[env.staging]
+name = "smallaviationmonitor-api-staging"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+
+# Build configuration
+[build]
+command = "npm run build"
+
+[build.upload]
+format = "modules"
+main = "./dist/index.js"
