@@ -85,3 +85,22 @@ These rules are binding for this repository.
   2.  Re-open changed files to spot-check final content.
   3.  Run `git status` to ensure changes are in the working tree and not stuck in an editor preview.
 - Never run builds/tests while any "Keep/Undo" banner is visible.
+
+## Full local validation BEFORE any push/deploy (MANDATORY)
+
+Before committing/pushing/deploying, ALWAYS execute this workflow in order:
+
+1. **Save-All** (ensure no "Keep/Undo" prompts visible)
+2. **Local build**: `npm run build` in `frontend/` — must PASS
+3. **Serve locally**: `npm run dev` or equivalent local server
+4. **Playwright tests against LOCAL**:
+   - Set `BASE_URL=http://localhost:5173` (or local dev server)
+   - Run `npx playwright test` in `tests/`
+   - Verify all assertions PASS (anchors present, "Launch Web App Now" visible, no "Download APK")
+   - Save snapshots to `tests/output/local/`
+5. **Review snapshots**: Open PNGs and HTMLs to confirm correctness
+6. **Only then**: commit, push, and deploy to production
+
+If Playwright tests fail locally, DO NOT push. Fix the issue first.
+
+Never skip local Playwright validation before pushing code that affects pages, routing, or content.
