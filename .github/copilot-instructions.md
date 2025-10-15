@@ -33,48 +33,80 @@ SmallAviationMonitor is an aviation monitoring system designed to track and anal
 
 ## Verification & Deployment Policy (MANDATORY)
 
-To prevent regressions and avoid asking the user to manually verify, every change that affects build, deploy, or runtime behavior MUST follow this policy:
+**CORE PRINCIPLES**:
 
-1. Triple‑check before stating “fixed” or “working”. You must verify:
+- **NEVER PUSH UNTESTED CODE** - If it doesn't work locally, DO NOT push to GitHub/Cloudflare. Every push costs money.
+- **Fix your own mistakes immediately** - Never ask permission to clean up your own mess. If you broke it, fix it without asking.
 
-   - Local build: `npm run build` in `frontend/` completes successfully.
-   - GitHub status: Latest workflow `Deploy to Cloudflare` completed successfully for the current commit SHA.
-   - Cloudflare deployment: Identify the latest deployment ID/URL for project `smallaviationmonitor` and environment `Production`.
-   - Live site verification: Fetch and inspect the live URLs to confirm expected content is present and unexpected content is absent.
+### 1. Local Verification FIRST (mandatory sequence)
 
-2. Required live checks (fetch, not screenshots):
+Before committing/pushing/deploying, ALWAYS execute this workflow in order:
 
-   - `https://smallaviationmonitor.pages.dev/`
-   - `https://smallaviationmonitor.pages.dev/download` must contain “Launch Web App Now” and must NOT contain “Download APK”.
-   - `https://smallaviationmonitor.pages.dev/pwa` must load (HTTP 200) and include PWA shell content.
+1. **Save-All** (ensure no "Keep/Undo" prompts visible)
+2. **Local build**: `npm run build` in `frontend/` AND `backend/` — both MUST PASS
+3. **Type check**: Resolve ALL TypeScript errors before proceeding
+4. **Serve locally**: `npm run dev` in `frontend/`
+5. **Playwright tests**: `npx playwright test` in `tests/` against `http://localhost:5173`
+   - Verify all assertions PASS (anchors present, "Launch Web App Now" visible, no "Download APK")
+   - Save snapshots to `tests/output/local/`
+6. **Review snapshots**: Open PNGs and HTMLs to confirm correctness
+7. **ONLY IF ALL PASS**: commit and push
 
-3. Evidence in replies:
+If Playwright tests fail locally, DO NOT push. Fix the issue first.
 
-   - Provide the commit SHA deployed, deployment ID (from Cloudflare Pages), and timestamps.
-   - Include a short excerpt of fetched HTML (or a clear summary) showing the expected markers.
-   - If anything fails, state it clearly and fix it before asking the user to test.
+### 2. GitHub Secrets Setup (user must configure once)
 
-4. Environment variables:
+See `GITHUB-SECRETS-SETUP.md` for detailed instructions. Required secrets:
 
-   - For production builds, ensure `VITE_GOOGLE_MAPS_API_KEY` is available to the build. In GitHub Actions, pass it via `${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}`.
-   - Never request the user to paste secrets into chat. Use repo secrets or Cloudflare Pages variables.
+- `CLOUDFLARE_API_TOKEN` - Get from Cloudflare dashboard → My Profile → API Tokens
+- `CLOUDFLARE_ACCOUNT_ID` - Get from `backend/wrangler.toml` or Cloudflare dashboard
+- `VITE_GOOGLE_MAPS_API_KEY` - Get from Google Cloud Console → APIs & Services → Credentials
 
-5. Cloudflare Pages rules:
+Never ask user to paste secrets in chat. Point them to GitHub Secrets UI at:
+`https://github.com/[owner]/[repo]/settings/secrets/actions`
 
-   - Prefer GitHub‑connected deployments; if not connected, deploy via `wrangler pages deploy` and report the returned deployment URL.
-   - Avoid stale builds: always `npm run build` immediately before `wrangler pages deploy`.
-   - If Pages shows caching, trigger a fresh deployment instead of asking the user to clear cache.
+### 3. After Push - Verify Deployment
 
-6. Edit safety:
+1. Wait for GitHub Actions workflow to complete
+2. Check workflow status: `https://github.com/[owner]/[repo]/actions`
+3. Verify Cloudflare Pages deployment succeeded
+4. Fetch and inspect live URLs:
+   - `https://smallaviationmonitor.pages.dev/` - must have x-app-name, x-build-sha, x-build-time, x-download-mode
+   - `https://smallaviationmonitor.pages.dev/download` - must contain "Launch Web App Now", must NOT contain "Download APK"
+   - `https://smallaviationmonitor.pages.dev/pwa` - must load (HTTP 200)
+5. Provide evidence: commit SHA, deployment ID, timestamps, HTML excerpts
 
-   - Avoid destructive multi-insert/duplicate edits. After any multi‑line file rewrite, re-open the file and re-run `npm run build` to catch syntax errors before committing.
-   - Do not leave the workspace with unresolved lint/type/build errors.
+### 4. Type Safety Rules
 
-7. Communication:
-   - Do not claim success until all checks pass. If waiting is required, wait long enough (≥6 minutes) and then re-check.
-   - No “please try” language—perform steps yourself and provide results.
+- Import all types explicitly: `import type { D1Database, ExecutionContext } from '@cloudflare/workers-types';`
+- Never leave "Cannot find name" errors unresolved
+- Run `npm run build` in backend/ to verify types before committing
 
-These rules are binding for this repository.
+### 5. Edit Safety Rules
+
+- Never use bulk-edit modes that create "Keep/Undo" prompts
+- Use direct file edits only (replace_string_in_file with exact context)
+- After multi-line rewrites, re-read the file to verify correctness
+- Save-All before any build/test/commit operation
+
+### 6. Communication Rules
+
+- Do not claim success until ALL checks pass
+- No "please try" language - perform steps yourself
+- If something fails, fix it immediately without asking permission
+- Report evidence (URLs, timestamps, commit SHA, deployment ID)
+
+### 7. Money Awareness
+
+Every failed Cloudflare build/deployment costs money. Therefore:
+
+- NEVER push broken code
+- NEVER push without local testing
+- NEVER push with TypeScript errors
+- NEVER push with failing Playwright tests
+- Test locally first, always
+
+These rules are binding for this repository. Violations waste money and user trust.
 
 ## No bulk-edit previews / Always save first (MANDATORY)
 
@@ -85,22 +117,3 @@ These rules are binding for this repository.
   2.  Re-open changed files to spot-check final content.
   3.  Run `git status` to ensure changes are in the working tree and not stuck in an editor preview.
 - Never run builds/tests while any "Keep/Undo" banner is visible.
-
-## Full local validation BEFORE any push/deploy (MANDATORY)
-
-Before committing/pushing/deploying, ALWAYS execute this workflow in order:
-
-1. **Save-All** (ensure no "Keep/Undo" prompts visible)
-2. **Local build**: `npm run build` in `frontend/` — must PASS
-3. **Serve locally**: `npm run dev` or equivalent local server
-4. **Playwright tests against LOCAL**:
-   - Set `BASE_URL=http://localhost:5173` (or local dev server)
-   - Run `npx playwright test` in `tests/`
-   - Verify all assertions PASS (anchors present, "Launch Web App Now" visible, no "Download APK")
-   - Save snapshots to `tests/output/local/`
-5. **Review snapshots**: Open PNGs and HTMLs to confirm correctness
-6. **Only then**: commit, push, and deploy to production
-
-If Playwright tests fail locally, DO NOT push. Fix the issue first.
-
-Never skip local Playwright validation before pushing code that affects pages, routing, or content.

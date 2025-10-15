@@ -3,6 +3,8 @@
  * Main entry point for Cloudflare Workers API
  */
 
+import type { D1Database, ExecutionContext } from '@cloudflare/workers-types';
+
 export interface Env {
 	DB: D1Database;
 	// ALERT_QUEUE: Queue; // Requires paid plan

@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import fs from "fs";
+
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     {
       name: 'inject-build-anchors',
-      transformIndexHtml(html) {
+      transformIndexHtml(html: string) {
         const sha = process.env.VITE_GIT_SHA || 'unknown';
         const time = process.env.VITE_BUILD_TIME || new Date().toISOString();
         return html
