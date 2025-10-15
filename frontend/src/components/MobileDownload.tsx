@@ -136,6 +136,92 @@ export function MobileDownload() {
         </Card>
       </div>
 
+      {/* PWA Option - Backup for both platforms */}
+      <Card className="border-2 border-blue-500 mb-8">
+        <CardHeader>
+          <div className="flex items-center gap-3 mb-2">
+            <Smartphone className="h-8 w-8 text-blue-600" />
+            <CardTitle className="text-2xl">Web App (PWA) - Works on Both!</CardTitle>
+          </div>
+          <CardDescription>
+            Progressive Web App - No installation required, works on iOS and Android
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* QR Code for PWA */}
+          <div className="bg-white p-4 rounded-lg inline-block mx-auto flex justify-center">
+            <QRCodeSVG
+              value={`${window.location.origin}/pwa`}
+              size={200}
+              level="H"
+              includeMargin={true}
+            />
+          </div>
+          <p className="text-sm text-center text-muted-foreground">
+            Scan to open PWA on your phone
+          </p>
+
+          {/* Launch Button */}
+          <Button
+            className="w-full bg-blue-600 hover:bg-blue-700"
+            size="lg"
+            onClick={() => window.open('/pwa', '_blank')}
+          >
+            <Smartphone className="mr-2 h-5 w-5" />
+            Launch Web App
+          </Button>
+
+          {/* Installation Instructions */}
+          <Alert className="bg-blue-50 border-blue-200">
+            <AlertCircle className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-xs">
+              <strong>How to "Install" (Add to Home Screen):</strong>
+              <div className="mt-2 space-y-2">
+                <div>
+                  <strong>iOS (Safari):</strong>
+                  <ol className="mt-1 space-y-1 list-decimal list-inside">
+                    <li>Open the PWA link in Safari</li>
+                    <li>Tap the Share button (square with arrow)</li>
+                    <li>Select "Add to Home Screen"</li>
+                    <li>Grant location permission when prompted</li>
+                  </ol>
+                </div>
+                <div>
+                  <strong>Android (Chrome):</strong>
+                  <ol className="mt-1 space-y-1 list-decimal list-inside">
+                    <li>Open the PWA link in Chrome</li>
+                    <li>Tap "Add to Home Screen" prompt</li>
+                    <li>Or: Menu → "Install App"</li>
+                    <li>Grant location permission when prompted</li>
+                  </ol>
+                </div>
+              </div>
+            </AlertDescription>
+          </Alert>
+
+          <div className="pt-2">
+            <p className="text-sm font-semibold mb-1">Features:</p>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>✓ Works on iOS & Android</li>
+              <li>✓ No app store required</li>
+              <li>✓ Full GPS/location access</li>
+              <li>✓ Offline support with data sync</li>
+              <li>✓ Installable like a native app</li>
+              <li>✓ Automatic updates</li>
+              <li>✓ Same features as native apps</li>
+            </ul>
+          </div>
+
+          <Alert className="bg-green-50 border-green-200">
+            <AlertCircle className="h-4 w-4 text-green-600" />
+            <AlertDescription className="text-xs">
+              <strong>Recommended for iOS users!</strong> The PWA works great on iOS and doesn't
+              require TestFlight or App Store approval. Just add to home screen and you're ready to go!
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
+
       {/* Additional Information */}
       <div className="grid md:grid-cols-2 gap-6">
         <Card>

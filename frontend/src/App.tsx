@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import Index from "./pages/Index";
 import Download from "./pages/Download";
+import PWA from "./pages/PWA";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/download" element={<Download />} />
+            <Route path="/pwa" element={<PWA />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

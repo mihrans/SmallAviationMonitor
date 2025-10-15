@@ -1,0 +1,44 @@
+{
+  "name": "SmallAviationMonitor GPS Logger",
+  "short_name": "Aviation GPS",
+  "description": "GPS tracking app for aircraft, drones, paragliders, and hot air balloons",
+  "start_url": "/pwa",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["navigation", "utilities", "travel"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Start Tracking",
+      "short_name": "Track",
+      "description": "Start GPS tracking immediately",
+      "url": "/pwa?action=track",
+      "icons": [
+        {
+          "src": "/pwa-icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    "geolocation"
+  ]
+}
