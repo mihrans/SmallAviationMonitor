@@ -89,6 +89,12 @@ const AppLayout: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-4">
+          <a
+            href="/download"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+          >
+            📱 Download Mobile App
+          </a>
           <div className="text-sm text-slate-400">
             <span className="text-green-400 font-mono">{stats.activeDevices}</span> / {stats.totalDevices} Active
           </div>
