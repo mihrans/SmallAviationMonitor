@@ -1,14 +1,138 @@
-User-agent: Googlebot
-Allow: /
+# SmallAviationMonitor - Block ALL BotsUser-agent: Googlebot
 
-User-agent: Bingbot
-Allow: /
+# This site is for human use onlyAllow: /
 
-User-agent: Twitterbot
-Allow: /
+
+
+User-agent: *User-agent: Bingbot
+
+Disallow: /Allow: /
+
+
+
+# Block all known search engine botsUser-agent: Twitterbot
+
+User-agent: GooglebotAllow: /
+
+Disallow: /
 
 User-agent: facebookexternalhit
-Allow: /
+
+User-agent: Googlebot-ImageAllow: /
+
+Disallow: /
 
 User-agent: *
-Allow: /
+
+User-agent: Googlebot-NewsAllow: /
+
+Disallow: /
+
+User-agent: Googlebot-Video
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+User-agent: Slurp
+Disallow: /
+
+User-agent: DuckDuckBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: Applebot
+Disallow: /
+
+User-agent: facebookexternalhit
+Disallow: /
+
+User-agent: Twitterbot
+Disallow: /
+
+User-agent: LinkedInBot
+Disallow: /
+
+User-agent: WhatsApp
+Disallow: /
+
+# Block AI scrapers
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: Omgili
+Disallow: /
+
+# Block other crawlers and scrapers
+User-agent: ia_archiver
+Disallow: /
+
+User-agent: archive.org_bot
+Disallow: /
+
+User-agent: Mediapartners-Google
+Disallow: /
+
+User-agent: AdsBot-Google
+Disallow: /
+
+User-agent: msnbot
+Disallow: /
+
+User-agent: Teoma
+Disallow: /
+
+User-agent: Yahoo! Slurp
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: Sogou
+Disallow: /
+
+User-agent: Exabot
+Disallow: /
+
+User-agent: facebot
+Disallow: /
+
+User-agent: ia_archiver
+Disallow: /
+
+# Sitemap: none (we don't want to be indexed)

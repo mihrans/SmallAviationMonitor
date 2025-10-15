@@ -2,22 +2,40 @@
 
 ## 🚀 Immediate Next Steps
 
-### 1. Create GitHub Repository
-Go to https://github.com/new and create a new repository named `SmallAviationMonitor`
+### 1. ✅ GitHub Repository (DONE)
+Repository: https://github.com/mihrans/SmallAviationMonitor
 
-### 2. Push to GitHub
-```bash
-cd H:\SmallAviationMonitor
+### 2. ✅ Cloudflare Deployment (DONE)
+- Frontend: https://smallaviationmonitor.pages.dev
+- Backend API: https://smallaviationmonitor-api.administrator-112.workers.dev
+- Database: Cloudflare D1 (7 tables initialized)
 
-# Add GitHub remote (replace YOUR_USERNAME)
-git remote add origin https://github.com/YOUR_USERNAME/SmallAviationMonitor.git
+### 3. 🗺️ Setup Google Maps API Key
 
-# Push to GitHub
-git branch -M main
-git push -u origin main
-```
+**Required for map functionality:**
 
-### 3. Test Frontend Locally
+1. Get API Key:
+   - Go to https://console.cloud.google.com/google/maps-apis
+   - Create project or select existing
+   - Enable "Maps JavaScript API"
+   - Create credentials → API Key
+   - Restrict key to your domain
+
+2. For Local Development:
+   ```bash
+   cd frontend
+   cp .env.local.example .env.local
+   # Edit .env.local and add your API key:
+   # VITE_GOOGLE_MAPS_API_KEY=your_actual_api_key_here
+   ```
+
+3. For Production (Cloudflare Pages):
+   - Go to https://dash.cloudflare.com
+   - Pages → smallaviationmonitor → Settings → Environment variables
+   - Add variable: `VITE_GOOGLE_MAPS_API_KEY` = your API key
+   - Redeploy frontend
+
+### 4. Test Frontend Locally
 ```bash
 cd frontend
 npm install

@@ -4,6 +4,8 @@
 
 Successfully refocused SmallAviationMonitor on **Progressive Web App only**, archiving native mobile apps for future use.
 
+**Latest Update:** Added Google Maps integration + Bot protection (October 15, 2025)
+
 ---
 
 ## 📊 What Changed
@@ -42,6 +44,26 @@ Successfully refocused SmallAviationMonitor on **Progressive Web App only**, arc
    - "Current Focus: PWA Only" section
    - Native apps mentioned as archived
 
+### 6. **🆕 Google Maps Integration**
+   - ✅ Replaced simulated map with real Google Maps
+   - ✅ Uses @vis.gl/react-google-maps library
+   - ✅ Interactive markers for each device
+   - ✅ Info windows with device details
+   - ✅ Auto-centering based on active devices
+   - ✅ Reservation markers on map
+   - ✅ Device count badge overlay
+   - ✅ API key from environment variable
+   - ✅ Clear error message if API key missing
+
+### 7. **🆕 Bot Protection (No CAPTCHA)**
+   - ✅ Updated robots.txt to block ALL bots
+   - ✅ Added meta tags to block search engines
+   - ✅ Blocked AI scrapers (GPTBot, CCBot, etc.)
+   - ✅ Blocked social media crawlers
+   - ✅ Blocked archive bots
+   - ✅ Humans can still access normally
+   - ✅ No CAPTCHA required
+
 ---
 
 ## 🌐 Live System
@@ -63,6 +85,8 @@ Successfully refocused SmallAviationMonitor on **Progressive Web App only**, arc
 | PWA | ✅ Working | iOS & Android |
 | Service Worker | ✅ Active | Offline support |
 | PWA Icons | ✅ Created | SVG format |
+| Google Maps | ✅ Integrated | Real-time device tracking |
+| Bot Protection | ✅ Active | robots.txt + meta tags |
 | Native Apps | 📦 Archived | `_ARCHIVED/mobile/` |
 
 ---
@@ -156,10 +180,75 @@ Restore native apps if you need:
 
 ---
 
-## 📝 Git Changes
+## �️ Google Maps Setup
+
+### API Key Configuration
+
+**For Local Development:**
+1. Copy `.env.local.example` to `.env.local`
+2. Get API key from [Google Cloud Console](https://console.cloud.google.com/)
+3. Enable Maps JavaScript API
+4. Add key to `.env.local`:
+   ```
+   VITE_GOOGLE_MAPS_API_KEY=your_api_key_here
+   ```
+
+**For Production (Cloudflare Pages):**
+1. Go to Cloudflare dashboard
+2. Navigate to: Pages → smallaviationmonitor → Settings → Environment variables
+3. Add `VITE_GOOGLE_MAPS_API_KEY` = your_api_key
+4. Redeploy
+
+### Map Features
+- ✅ Device markers with icons (✈️ 🚁 🪂 🎈)
+- ✅ Color-coded status (green=online, gray=offline, orange=warning)
+- ✅ Click marker → Info window with details
+- ✅ Auto-center based on active devices
+- ✅ Device count badge overlay
+- ✅ Map legend
+- ✅ Reservation markers
+
+---
+
+## 🤖 Bot Protection (No CAPTCHA)
+
+### How It Works
+**Multi-layer bot blocking:**
+1. `robots.txt` - Blocks ALL bots via Disallow: /
+2. HTML meta tags - Redundant blocking (noindex, nofollow)
+3. Specific bot blocking - Search engines, AI scrapers, social crawlers
+
+**Blocked Bots:**
+- Search engines: Google, Bing, Yahoo, DuckDuckGo, Baidu, Yandex
+- AI scrapers: GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-Web
+- Social media: Facebook, Twitter, LinkedIn, WhatsApp
+- SEO tools: AhrefsBot, SemrushBot, MJ12bot
+- Archive bots: Internet Archive, Wayback Machine
+
+**Human Access:**
+- ✅ No CAPTCHA required
+- ✅ No interference for legitimate users
+- ✅ Works on all devices
+- ✅ No JavaScript required
+
+---
+
+## �📝 Git Changes
 
 ### Commits
 ```
+Commit: [PENDING]
+Message: "Add Google Maps integration + Bot protection"
+Changes:
+  - Install @vis.gl/react-google-maps
+  - Rewrite MapView.tsx with Google Maps
+  - Create .env.local.example with API key instructions
+  - Update robots.txt to block ALL bots
+  - Add bot protection meta tags to index.html
+  - Update QUICK-START.md
+  - Update PWA-ONLY-COMPLETE.md
+Status: ⏳ Ready to commit
+
 Commit: ad33136
 Message: "Add PWA-only focus summary documentation"
 Status: ✅ Pushed
@@ -180,8 +269,8 @@ Status: ✅ Pushed
 ### Repository
 - **Branch**: main
 - **Files**: 100+ files
-- **Status**: ✅ All changes pushed
-- **Deployment**: 🔄 Cloudflare auto-deploying
+- **Status**: ⏳ Google Maps changes pending commit
+- **Deployment**: 🔄 Cloudflare auto-deploying after next push
 
 ---
 
