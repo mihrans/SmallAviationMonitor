@@ -48,6 +48,29 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref_name }}
 
+      - name: Verify production deployment content
+        if: github.ref == 'refs/heads/main'
+        run: |
+          set -e
+          echo "Waiting 30s for Pages propagation..." && sleep 30
+          echo "Checking homepage"
+          curl -sS https://smallaviationmonitor.pages.dev/ | head -n 50 > /tmp/home.html
+          test -s /tmp/home.html
+          echo "Checking download page markers"
+          curl -sS https://smallaviationmonitor.pages.dev/download | tee /tmp/download.html | head -n 60
+          if grep -q "Download APK" /tmp/download.html; then
+            echo "ERROR: Found 'Download APK' on /download (should be PWA-only)" >&2
+            exit 1
+          fi
+          if ! grep -q "Launch Web App Now" /tmp/download.html; then
+            echo "ERROR: Missing 'Launch Web App Now' on /download" >&2
+            exit 1
+          fi
+          echo "Checking PWA shell"
+          curl -sS https://smallaviationmonitor.pages.dev/pwa | head -n 80 > /tmp/pwa.html
+          test -s /tmp/pwa.html
+          echo "Verification passed."
+
   deploy-backend:
     name: Deploy Backend Workers
     runs-on: ubuntu-latest
